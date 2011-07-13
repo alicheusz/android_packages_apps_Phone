@@ -68,7 +68,7 @@ public class CallNotifier extends Handler
 
     // Maximum time we allow the CallerInfo query to run,
     // before giving up and falling back to the default ringtone.
-    private static final int RINGTONE_QUERY_WAIT_TIME = 500;  // msec
+    private static final int RINGTONE_QUERY_WAIT_TIME = SystemProperties.getInt("ro.ringtone_query_wait_time", 500);  // msec
 
     // Timers related to CDMA Call Waiting
     // 1) For displaying Caller Info
