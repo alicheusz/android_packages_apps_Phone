@@ -153,6 +153,7 @@ public class CallNotifier extends Handler
     private BluetoothHandsfree mBluetoothHandsfree;
     private CallLogAsync mCallLog;
     private boolean mSilentRingerRequested;
+    private boolean mHasRingingCall;
 
     // ToneGenerator instance for playing SignalInfo tones
     private ToneGenerator mSignalInfoToneGenerator;
@@ -253,6 +254,7 @@ public class CallNotifier extends Handler
                     PhoneBase pb =  (PhoneBase)((AsyncResult)msg.obj).result;
 
                     if ((pb.getState() == Phone.State.RINGING)
+                            && mHasRingingCall
                             && (mSilentRingerRequested == false)) {
                         if (DBG) log("RINGING... (PHONE_INCOMING_RING event)");
                         mRinger.ring();
@@ -544,7 +546,7 @@ public class CallNotifier extends Handler
 
             // In this case, just log the request and ring.
             if (VDBG) log("RINGING... (request to ring arrived while query is running)");
-            mRinger.ring();
+            startRinging();
 
             // in this case, just fall through like before, and call
             // PhoneUtils.showIncomingCallUi
@@ -606,7 +608,7 @@ public class CallNotifier extends Handler
 
         // Ring, either with the queried ringtone or default one.
         if (VDBG) log("RINGING... (onCustomRingQueryComplete)");
-        mRinger.ring();
+        startRinging();
 
         // ...and show the InCallScreen.
         PhoneUtils.showIncomingCallUi();
@@ -708,7 +710,7 @@ public class CallNotifier extends Handler
             // TODO: Confirm that this call really *is* unnecessary, and if so,
             // remove it!
             if (DBG) log("stopRing()... (OFFHOOK state)");
-            mRinger.stopRing();
+            stopRinging();
 
             // put a icon in the status bar
             NotificationMgr.getDefault().updateInCallNotification();
@@ -933,11 +935,11 @@ public class CallNotifier extends Handler
                 NotificationMgr.getDefault().cancelCallInProgressNotification();
             } else {
                 if (DBG) log("stopRing()... (onDisconnect)");
-                mRinger.stopRing();
+                stopRinging();
             }
         } else { // GSM
             if (DBG) log("stopRing()... (onDisconnect)");
-            mRinger.stopRing();
+            stopRinging();
         }
 
         // stop call waiting tone if needed when disconnecting
@@ -1996,6 +1998,16 @@ public class CallNotifier extends Handler
         }
         if (DBG) log("- getPresentation: presentation: " + presentation);
         return presentation;
+    }
+
+    private void startRinging() {
+        mRinger.ring();
+        mHasRingingCall = true;
+    }
+
+    private void stopRinging() {
+        mRinger.stopRing();
+        mHasRingingCall = false;
     }
 
     private void log(String msg) {
