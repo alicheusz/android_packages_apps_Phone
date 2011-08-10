@@ -126,6 +126,13 @@
         android:title="@string/left_hand"
         android:persistent="false"
         android:summary="@string/left_hand_sum"/>
+    <ListPreference
+        android:key="button_voice_quality_key"
+        android:title="@string/voice_quality_preferences_title"
+        android:summary="@string/voice_quality_summary"
+        android:entries="@array/voice_quality_choices"
+        android:entryValues="@array/voice_quality_values"
+        android:dialogTitle="@string/voice_quality_preferences_title"/>
     <PreferenceScreen
         android:key="button_black_list"
         android:title="@string/black_list"

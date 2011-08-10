@@ -46,7 +46,6 @@ import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 
-import android.preference.PreferenceManager;
 import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorEvent;
@@ -185,7 +184,7 @@ public class CallNotifier extends Handler
 
     public CallNotifier(PhoneApp app, Phone phone, Ringer ringer,
                         BluetoothHandsfree btMgr, CallLogAsync callLog) {
-        mSettings = CallFeaturesSetting.getInstance(PreferenceManager.getDefaultSharedPreferences(app));
+        mSettings = CallFeaturesSetting.getInstance(app);
         //mSensorManager = (SensorManager) app.getSystemService(Context.SENSOR_SERVICE);
         mApplication = app;
         mPhone = phone;

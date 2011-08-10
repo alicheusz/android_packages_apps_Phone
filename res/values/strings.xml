@@ -1151,7 +1151,7 @@
     <!-- added by cytown@gmail.com -->
     <string name="notification_ongoing_calling_format">Calling (<xliff:g id="duration">%s</xliff:g>)
     </string>
-    <string name="advanced_setting">Advanced Settings V.30.1</string>
+    <string name="advanced_setting">Advanced settings</string>
     <string name="vibrate_outgoing">Vibrate on answer</string>
     <string name="vibrate_outgoing_sum">Vibrate when a call is answered</string>
     <string name="vibrate_45">Vibrate every 45 seconds</string>
@@ -1186,4 +1186,20 @@
     <string name="per_change_mobile_network_desc">Application with this permission can, at any time, change between 2G Data and 3G data. 3G is faster, consumes more batery, and can also cost you more money.</string>
     <string name="phone_number_label">My phone number</string>
     <string name="phone_number_summary">Set the phone number for this device</string>
+
+     <!-- Crystal Talk -->
+    <string name="voice_quality_preferences_title">Voice quality</string>
+    <string name="voice_quality_summary">Set a voice profile to enhance your listening experience</string>
+    <string-array name="voice_quality_choices">
+        <item>Normal</item>
+        <item>Clear</item>
+        <item>Crisp</item>
+        <item>Bright</item>
+    </string-array>
+    <string-array name="voice_quality_values">
+        <item>Normal</item>
+        <item>Clear</item>
+        <item>Crisp</item>
+        <item>Bright</item>
+    </string-array>
 </resources>

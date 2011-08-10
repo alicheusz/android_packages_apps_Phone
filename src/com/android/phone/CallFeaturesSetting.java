@@ -129,6 +129,9 @@ public class CallFeaturesSetting extends PreferenceActivity
     private static final String BUTTON_VOICEMAIL_SETTING_KEY = "button_voicemail_setting_key";
     private static final String BUTTON_FDN_KEY   = "button_fdn_key";
 
+    private static final String BUTTON_VOICE_QUALITY_KEY = "button_voice_quality_key";
+    private static String mVoiceQuality;
+
     private static final String BUTTON_DTMF_KEY   = "button_dtmf_settings";
     private static final String BUTTON_RETRY_KEY  = "button_auto_retry_key";
     private static final String BUTTON_TTY_KEY    = "button_tty_mode_key";
@@ -195,6 +198,7 @@ public class CallFeaturesSetting extends PreferenceActivity
     private ListPreference mButtonDTMF;
     private ListPreference mButtonTTY;
     private ListPreference mVoicemailProviders;
+    private ListPreference mButtonVoiceQuality;
     private PreferenceScreen mVoicemailSettings;
 
     private class VoiceMailProvider {
@@ -450,6 +454,8 @@ private static final int ADD_BLACK_LIST_ID = 3;
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mSubMenuVoicemailSettings) {
             return true;
+        } else if (preference == mButtonVoiceQuality) {
+            return true;
         } else if (preference == mButtonDTMF) {
             return true;
         } else if (preference == mButtonTTY) {
@@ -491,6 +497,8 @@ private static final int ADD_BLACK_LIST_ID = 3;
                     Settings.System.DTMF_TONE_TYPE_WHEN_DIALING, index);
         } else if (preference == mButtonTTY) {
             handleTTYChange(preference, objValue);
+        } else if (preference == mButtonVoiceQuality) {
+            mVoiceQuality = (String) objValue;
         } else if (preference == mVoicemailProviders) {
             final String currentProviderKey = getCurrentVoicemailProviderKey();
             final String newProviderKey = (String)objValue;
@@ -527,6 +535,10 @@ private static final int ADD_BLACK_LIST_ID = 3;
         }
         // always let the preference setting proceed.
         return true;
+    }
+
+    public String getVoiceQuality() {
+        return mVoiceQuality;
     }
 
     // Preference click listener invoked on OnDialogClosed for EditPhoneNumberPreference.
@@ -1398,6 +1410,16 @@ case ADD_BLACK_LIST_ID:
         mButtonHAC = (CheckBoxPreference) findPreference(BUTTON_HAC_KEY);
         mButtonTTY = (ListPreference) findPreference(BUTTON_TTY_KEY);
         mVoicemailProviders = (ListPreference) findPreference(BUTTON_VOICEMAIL_PROVIDER_KEY);
+        mButtonVoiceQuality = (ListPreference) findPreference(BUTTON_VOICE_QUALITY_KEY);
+        if (mButtonVoiceQuality != null) {
+            if (getResources().getBoolean(R.bool.crystaltalk_enabled)) {
+                mButtonVoiceQuality.setOnPreferenceChangeListener(this);
+            } else {
+                prefSet.removePreference(mButtonVoiceQuality);
+                mButtonVoiceQuality = null;
+            }
+        }
+
         if (mVoicemailProviders != null) {
             mVoicemailProviders.setOnPreferenceChangeListener(this);
             mVoicemailSettings = (PreferenceScreen)findPreference(BUTTON_VOICEMAIL_SETTING_KEY);
@@ -1487,7 +1509,7 @@ case ADD_BLACK_LIST_ID:
         mVMProviderSettingsForced = false;
 
 // add by cytown for vibrate
-init(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
+init(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
 mButtonVibOutgoing = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_OUTGOING);
 mButtonVibOutgoing.setChecked(mVibOutgoing);
 mButtonVib45       = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_45);
@@ -1516,6 +1538,9 @@ if (getResources().getBoolean(R.bool.allow_in_call_touch_ui)) {
             removePreference(mButtonForceTouch);
 } else {
     mButtonForceTouch.setChecked(mForceTouch);
+}
+if (mButtonVoiceQuality != null) {
+    mButtonVoiceQuality.setValue(mVoiceQuality);
 }
 mButtonAddBlack = (EditPhoneNumberPreference) prefSet.findPreference(BUTTON_ADD_BLACK);
 mButtonAddBlack.setParentActivity(this, ADD_BLACK_LIST_ID, this);
@@ -1850,15 +1875,16 @@ if (((SensorManager)getSystemService(SENSOR_SERVICE)).getDefaultSensor(
     }
 
 // add by cytown
-public static CallFeaturesSetting getInstance(SharedPreferences pref) {
+public static CallFeaturesSetting getInstance(Context context) {
     if (mInstance == null) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         mInstance = new CallFeaturesSetting();
-        mInstance.init(pref);
+        mInstance.init(context, pref);
     }
     return mInstance;
 }
 
-private void init(SharedPreferences pref) {
+private void init(Context context, SharedPreferences pref) {
     mVibOutgoing = pref.getBoolean(BUTTON_VIBRATE_OUTGOING, true);
     mVib45       = pref.getBoolean(BUTTON_VIBRATE_45, false);
     mVibHangup   = pref.getBoolean(BUTTON_VIBRATE_HANGUP, true);
@@ -1871,6 +1897,11 @@ private void init(SharedPreferences pref) {
     mLeftHand = pref.getBoolean(BUTTON_LEFT_HAND, false);
     mVibCallWaiting = pref.getBoolean(BUTTON_VIBRATE_CALL_WAITING, false);
     mForceTouch  = pref.getBoolean(BUTTON_FORCE_TOUCH, PhoneUtils.isProximitySensorAvailable(PhoneApp.getInstance()));
+    if (context.getResources().getBoolean(R.bool.crystaltalk_enabled)) {
+        mVoiceQuality = pref.getString(BUTTON_VOICE_QUALITY_KEY, "Normal");
+    } else {
+        mVoiceQuality = null;
+    }
     ObjectInputStream ois = null;
     boolean correctVer = false;
     try {
@@ -1971,8 +2002,9 @@ private void initPrefBlackList() {
 @Override
 protected void onStop() {
 
+    Context context = getApplicationContext();
     //System.out.println("save please!");
-    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
     Editor outState = pref.edit();
     outState.putBoolean(BUTTON_VIBRATE_OUTGOING, mButtonVibOutgoing.isChecked());
     outState.putBoolean(BUTTON_VIBRATE_45, mButtonVib45.isChecked());
@@ -1986,8 +2018,11 @@ protected void onStop() {
     outState.putBoolean(BUTTON_LEFT_HAND, mButtonLeftHand.isChecked());
     outState.putBoolean(BUTTON_VIBRATE_CALL_WAITING, mButtonVibCallWaiting.isChecked());
     outState.putBoolean(BUTTON_FORCE_TOUCH, mButtonForceTouch == null || mButtonForceTouch.isChecked());
+    if (mButtonVoiceQuality != null) {
+        outState.putString(BUTTON_VOICE_QUALITY_KEY, mButtonVoiceQuality.getValue());
+    }
     outState.commit();
-    init(pref);
+    init(context, pref);
     super.onStop();
 }
 

@@ -53,9 +53,6 @@ import com.android.internal.telephony.Connection;
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneBase;
 
-import android.preference.PreferenceManager;
-
-
 /**
  * NotificationManager-related utility code for the Phone app.
  */
@@ -118,7 +115,7 @@ private CallFeaturesSetting mSettings;
 
     NotificationMgr(Context context) {
         mContext = context;
-mSettings = CallFeaturesSetting.getInstance(PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext()));
+    mSettings = CallFeaturesSetting.getInstance(context.getApplicationContext());
         mNotificationMgr = (NotificationManager)
             context.getSystemService(Context.NOTIFICATION_SERVICE);
 

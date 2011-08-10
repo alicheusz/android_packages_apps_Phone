@@ -598,7 +598,7 @@ public class InCallScreen extends Activity
             mInCallInitialStatus = InCallInitStatus.SUCCESS;
         }
 
-        mSettings = CallFeaturesSetting.getInstance(android.preference.PreferenceManager.getDefaultSharedPreferences(this));
+        mSettings = CallFeaturesSetting.getInstance(this);
         mForceTouch = mSettings.mForceTouch;
         // The "touch lock overlay" feature is used only on devices that
         // *don't* use a proximity sensor to turn the screen off while in-call.
@@ -1865,7 +1865,7 @@ public class InCallScreen extends Activity
 
         // Keep track of whether this call was user-initiated or not.
         // (This affects where we take the user next; see delayedCleanupAfterDisconnect().)
-        mShowCallLogAfterDisconnect = !c.isIncoming() && CallFeaturesSetting.getInstance(android.preference.PreferenceManager.getDefaultSharedPreferences(this)).mReturnHome;
+        mShowCallLogAfterDisconnect = !c.isIncoming() && CallFeaturesSetting.getInstance(this).mReturnHome;
 
         // We bail out immediately (and *don't* display the "call ended"
         // state at all) in a couple of cases, including those where we
