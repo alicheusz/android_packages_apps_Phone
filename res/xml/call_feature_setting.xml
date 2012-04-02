@@ -133,6 +133,12 @@
         android:entries="@array/voice_quality_choices"
         android:entryValues="@array/voice_quality_values"
         android:dialogTitle="@string/voice_quality_preferences_title"/>
+    <!-- Hide Hold button  backported from CM7 (vikas) -->
+    <CheckBoxPreference
+	android:key="button_hide_hold_button"
+	android:title="@string/hide_hold_button"
+	android:persistent="false"
+	android:summary="@string/hide_hold_button_sum"/>
     <PreferenceScreen
         android:key="button_black_list"
         android:title="@string/black_list"

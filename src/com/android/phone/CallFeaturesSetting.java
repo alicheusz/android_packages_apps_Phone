@@ -201,6 +201,11 @@ public class CallFeaturesSetting extends PreferenceActivity
     private ListPreference mButtonVoiceQuality;
     private PreferenceScreen mVoicemailSettings;
 
+    // Hide hold button
+    private static final String BUTTON_HIDE_HOLD_BUTTON = "button_hide_hold_button";
+    private CheckBoxPreference mButtonHideHoldButton;
+    static boolean mHideHoldButton;
+
     private class VoiceMailProvider {
         public VoiceMailProvider(String name, Intent intent) {
             this.name = name;
@@ -1556,6 +1561,9 @@ if (((SensorManager)getSystemService(SENSOR_SERVICE)).getDefaultSensor(
 }
 
 //====
+mButtonHideHoldButton = (CheckBoxPreference) prefSet.findPreference(BUTTON_HIDE_HOLD_BUTTON);
+mButtonHideHoldButton.setChecked(mHideHoldButton);
+
     }
 
     @Override
@@ -1897,6 +1905,7 @@ private void init(Context context, SharedPreferences pref) {
     mLeftHand = pref.getBoolean(BUTTON_LEFT_HAND, false);
     mVibCallWaiting = pref.getBoolean(BUTTON_VIBRATE_CALL_WAITING, false);
     mForceTouch  = pref.getBoolean(BUTTON_FORCE_TOUCH, PhoneUtils.isProximitySensorAvailable(PhoneApp.getInstance()));
+    mHideHoldButton = pref.getBoolean(BUTTON_HIDE_HOLD_BUTTON, false);
     if (context.getResources().getBoolean(R.bool.crystaltalk_enabled)) {
         mVoiceQuality = pref.getString(BUTTON_VOICE_QUALITY_KEY, "Normal");
     } else {
@@ -2018,6 +2027,7 @@ protected void onStop() {
     outState.putBoolean(BUTTON_LEFT_HAND, mButtonLeftHand.isChecked());
     outState.putBoolean(BUTTON_VIBRATE_CALL_WAITING, mButtonVibCallWaiting.isChecked());
     outState.putBoolean(BUTTON_FORCE_TOUCH, mButtonForceTouch == null || mButtonForceTouch.isChecked());
+    outState.putBoolean(BUTTON_HIDE_HOLD_BUTTON, mButtonHideHoldButton.isChecked());
     if (mButtonVoiceQuality != null) {
         outState.putString(BUTTON_VOICE_QUALITY_KEY, mButtonVoiceQuality.getValue());
     }

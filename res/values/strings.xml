@@ -1144,6 +1144,9 @@
     <string name="slide_to_answer_and_end_active">Drag right to answer and\nend active call</string>
     <!-- Incoming call hint: drag the tab right to answer and end the call on hold -->
     <string name="slide_to_answer_and_end_onhold">Drag right to answer and\nend call on hold</string>
+    <!-- Hide hold button -->
+    <string name="hide_hold_button">Hide Hold Button</string>
+    <string name="hide_hold_button_sum">Hide the button that puts the current call on hold.</string>
     <!-- Incoming call hint shown on tab (must be kept very short): answer incoming call -->
     <string name="slide_to_answer_hint">Answer</string>
     <!-- Incoming call hint shown on tab (must be kept very short): decline incoming call -->
