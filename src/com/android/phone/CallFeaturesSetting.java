@@ -384,60 +384,65 @@ public class CallFeaturesSetting extends PreferenceActivity
     private CallForwardInfo[] mNewFwdSettings;
     String mNewVMNumber;
 
-// add by cytown for vibrate
-private static final String CATEGORY_ADVANCED = "pref_advanced_settings";
-private static CallFeaturesSetting mInstance = null;
-private static final String BUTTON_VIBRATE_OUTGOING = "button_vibrate_outgoing";
-private CheckBoxPreference mButtonVibOutgoing;
-static boolean mVibOutgoing;
-private static final String BUTTON_VIBRATE_45       = "button_vibrate_45";
-private CheckBoxPreference mButtonVib45;
-static boolean mVib45;
-private static final String BUTTON_VIBRATE_HANGUP   = "button_vibrate_hangup";
-private CheckBoxPreference mButtonVibHangup;
-static boolean mVibHangup;
-private static final String BUTTON_SCREEN_AWAKE     = "button_screen_awake";
-private CheckBoxPreference mButtonScreenAwake;
-static boolean mScreenAwake;
-private static final String BUTTON_ALWAYS_PROXIMITY = "button_always_proximity";
-private CheckBoxPreference mButtonAlwaysProximity;
-static boolean mAlwaysProximity;
-private static final String BUTTON_RETURN_HOME     = "button_return_home";
-private CheckBoxPreference mButtonReturnHome;
-static boolean mReturnHome;
-private static final String BUTTON_LED_NOTIFY       = "button_led_notify";
-private CheckBoxPreference mButtonLedNotify;
-static boolean mLedNotify;
-private static final String BUTTON_SHOW_ORGAN       = "button_show_organ";
-private CheckBoxPreference mButtonShowOrgan;
-static boolean mShowOrgan;
-private static final String BUTTON_FORCE_TOUCH      = "button_force_touch";
-private CheckBoxPreference mButtonForceTouch;
-static boolean mForceTouch;
-private static final String BUTTON_VIBRATE_CALL_WAITING = "button_vibrate_call_waiting";
-private CheckBoxPreference mButtonVibCallWaiting;
-static boolean mVibCallWaiting;
-// Hide this option until it is fixed.
-//static boolean mTurnSilence;
-//private static final String BUTTON_TURN_SILENCE     = "button_turn_silence";
-//private CheckBoxPreference mButtonTurnSilence;
-static boolean mLeftHand;
-private static final String BUTTON_LEFT_HAND        = "button_left_hand";
-private CheckBoxPreference mButtonLeftHand;
+    // add by cytown for vibrate
+    private static final String CATEGORY_ADVANCED = "pref_advanced_settings";
+    private static CallFeaturesSetting mInstance = null;
+    private static final String BUTTON_VIBRATE_OUTGOING = "button_vibrate_outgoing";
+    private CheckBoxPreference mButtonVibOutgoing;
+    static boolean mVibOutgoing;
+    private static final String BUTTON_VIBRATE_45       = "button_vibrate_45";
+    private CheckBoxPreference mButtonVib45;
+    static boolean mVib45;
+    private static final String BUTTON_VIBRATE_HANGUP   = "button_vibrate_hangup";
+    private CheckBoxPreference mButtonVibHangup;
+    static boolean mVibHangup;
+    private static final String BUTTON_SCREEN_AWAKE     = "button_screen_awake";
+    private CheckBoxPreference mButtonScreenAwake;
+    static boolean mScreenAwake;
+    private static final String BUTTON_ALWAYS_PROXIMITY = "button_always_proximity";
+    private CheckBoxPreference mButtonAlwaysProximity;
+    static boolean mAlwaysProximity;
+    private static final String BUTTON_RETURN_HOME     = "button_return_home";
+    private CheckBoxPreference mButtonReturnHome;
+    static boolean mReturnHome;
+    private static final String BUTTON_LED_NOTIFY       = "button_led_notify";
+    private CheckBoxPreference mButtonLedNotify;
+    static boolean mLedNotify;
+    // Incoming call in background
+    private static final String BG_INCALL_SCREEN = "bg_incall_screen";
+    private CheckBoxPreference mBgIncallScreen;
+    static boolean mBgIncall;
 
-private static final String BUTTON_ADD_BLACK = "button_add_black";
-private static final String CATEGORY_BLACK   = "cat_black_list";
-private static final String BLFILE           = "blacklist.dat";
-private static final int BLFILE_VER          = 1;
-private EditPhoneNumberPreference mButtonAddBlack;
-private PreferenceCategory mCatBlackList;
-private static HashSet<PhoneNo> setBlackList = new HashSet<PhoneNo>();
-private static final int ADD_BLACK_LIST_ID = 3;
+    private static final String BUTTON_SHOW_ORGAN       = "button_show_organ";
+    private CheckBoxPreference mButtonShowOrgan;
+    static boolean mShowOrgan;
+    private static final String BUTTON_FORCE_TOUCH      = "button_force_touch";
+    private CheckBoxPreference mButtonForceTouch;
+    static boolean mForceTouch;
+    private static final String BUTTON_VIBRATE_CALL_WAITING = "button_vibrate_call_waiting";
+    private CheckBoxPreference mButtonVibCallWaiting;
+    static boolean mVibCallWaiting;
+    // Hide this option until it is fixed.
+    //static boolean mTurnSilence;
+    //private static final String BUTTON_TURN_SILENCE     = "button_turn_silence";
+    //private CheckBoxPreference mButtonTurnSilence;
+    static boolean mLeftHand;
+    private static final String BUTTON_LEFT_HAND        = "button_left_hand";
+    private CheckBoxPreference mButtonLeftHand;
+
+    private static final String BUTTON_ADD_BLACK = "button_add_black";
+    private static final String CATEGORY_BLACK   = "cat_black_list";
+    private static final String BLFILE           = "blacklist.dat";
+    private static final int BLFILE_VER          = 1;
+    private EditPhoneNumberPreference mButtonAddBlack;
+    private PreferenceCategory mCatBlackList;
+    private static HashSet<PhoneNo> setBlackList = new HashSet<PhoneNo>();
+    private static final int ADD_BLACK_LIST_ID = 3;
 
     private boolean mForeground;
 
     @Override
-    public void onPause() {
+	public void onPause() {
         super.onPause();
         mForeground = false;
     }
@@ -1513,56 +1518,61 @@ case ADD_BLACK_LIST_ID:
         updateVoiceNumberField();
         mVMProviderSettingsForced = false;
 
-// add by cytown for vibrate
-init(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-mButtonVibOutgoing = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_OUTGOING);
-mButtonVibOutgoing.setChecked(mVibOutgoing);
-mButtonVib45       = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_45);
-mButtonVib45.setChecked(mVib45);
-mButtonVibHangup   = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_HANGUP);
-mButtonVibHangup.setChecked(mVibHangup);
-mButtonScreenAwake = (CheckBoxPreference) prefSet.findPreference(BUTTON_SCREEN_AWAKE);
-mButtonScreenAwake.setChecked(mScreenAwake);
-mButtonAlwaysProximity = (CheckBoxPreference) prefSet.findPreference(BUTTON_ALWAYS_PROXIMITY);
-mButtonAlwaysProximity.setChecked(mAlwaysProximity);
-mButtonReturnHome = (CheckBoxPreference) prefSet.findPreference(BUTTON_RETURN_HOME);
-mButtonReturnHome.setChecked(mReturnHome);
-mButtonLedNotify   = (CheckBoxPreference) prefSet.findPreference(BUTTON_LED_NOTIFY);
-mButtonLedNotify.setChecked(mLedNotify);
-mButtonShowOrgan   = (CheckBoxPreference) prefSet.findPreference(BUTTON_SHOW_ORGAN);
-mButtonShowOrgan.setChecked(mShowOrgan);
-//mButtonTurnSilence = (CheckBoxPreference) prefSet.findPreference(BUTTON_TURN_SILENCE);
-//mButtonTurnSilence.setChecked(mTurnSilence);
-mButtonLeftHand    = (CheckBoxPreference) prefSet.findPreference(BUTTON_LEFT_HAND);
-mButtonLeftHand.setChecked(mLeftHand);
-mButtonVibCallWaiting = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_CALL_WAITING);
-mButtonVibCallWaiting.setChecked(mVibCallWaiting);
-mButtonForceTouch  = (CheckBoxPreference) prefSet.findPreference(BUTTON_FORCE_TOUCH);
-if (getResources().getBoolean(R.bool.allow_in_call_touch_ui)) {
-    ((PreferenceCategory) prefSet.findPreference(CATEGORY_ADVANCED)).
-            removePreference(mButtonForceTouch);
-} else {
-    mButtonForceTouch.setChecked(mForceTouch);
-}
-if (mButtonVoiceQuality != null) {
-    mButtonVoiceQuality.setValue(mVoiceQuality);
-}
-mButtonAddBlack = (EditPhoneNumberPreference) prefSet.findPreference(BUTTON_ADD_BLACK);
-mButtonAddBlack.setParentActivity(this, ADD_BLACK_LIST_ID, this);
-mButtonAddBlack.setDialogOnClosedListener(this);
-mCatBlackList = (PreferenceCategory) prefSet.findPreference(CATEGORY_BLACK);
-initPrefBlackList();
+	// add by cytown for vibrate
+	init(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
+	mButtonVibOutgoing = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_OUTGOING);
+	mButtonVibOutgoing.setChecked(mVibOutgoing);
+	mButtonVib45       = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_45);
+	mButtonVib45.setChecked(mVib45);
+	mButtonVibHangup   = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_HANGUP);
+	mButtonVibHangup.setChecked(mVibHangup);
+	mButtonScreenAwake = (CheckBoxPreference) prefSet.findPreference(BUTTON_SCREEN_AWAKE);
+	mButtonScreenAwake.setChecked(mScreenAwake);
+	mButtonAlwaysProximity = (CheckBoxPreference) prefSet.findPreference(BUTTON_ALWAYS_PROXIMITY);
+	mButtonAlwaysProximity.setChecked(mAlwaysProximity);
+	mButtonReturnHome = (CheckBoxPreference) prefSet.findPreference(BUTTON_RETURN_HOME);
+	mButtonReturnHome.setChecked(mReturnHome);
+	mButtonLedNotify   = (CheckBoxPreference) prefSet.findPreference(BUTTON_LED_NOTIFY);
+	mButtonLedNotify.setChecked(mLedNotify);
+	mButtonShowOrgan   = (CheckBoxPreference) prefSet.findPreference(BUTTON_SHOW_ORGAN);
+	mButtonShowOrgan.setChecked(mShowOrgan);
+	//mButtonTurnSilence = (CheckBoxPreference) prefSet.findPreference(BUTTON_TURN_SILENCE);
+	//mButtonTurnSilence.setChecked(mTurnSilence);
+	mButtonLeftHand    = (CheckBoxPreference) prefSet.findPreference(BUTTON_LEFT_HAND);
+	mButtonLeftHand.setChecked(mLeftHand);
+	mButtonVibCallWaiting = (CheckBoxPreference) prefSet.findPreference(BUTTON_VIBRATE_CALL_WAITING);
+	mButtonVibCallWaiting.setChecked(mVibCallWaiting);
+	mButtonForceTouch  = (CheckBoxPreference) prefSet.findPreference(BUTTON_FORCE_TOUCH);
+	if (getResources().getBoolean(R.bool.allow_in_call_touch_ui)) {
+	    ((PreferenceCategory) prefSet.findPreference(CATEGORY_ADVANCED)).
+		removePreference(mButtonForceTouch);
+	} else {
+	    mButtonForceTouch.setChecked(mForceTouch);
+	}
+	if (mButtonVoiceQuality != null) {
+	    mButtonVoiceQuality.setValue(mVoiceQuality);
+	}
+	mButtonAddBlack = (EditPhoneNumberPreference) prefSet.findPreference(BUTTON_ADD_BLACK);
+	mButtonAddBlack.setParentActivity(this, ADD_BLACK_LIST_ID, this);
+	mButtonAddBlack.setDialogOnClosedListener(this);
+	mCatBlackList = (PreferenceCategory) prefSet.findPreference(CATEGORY_BLACK);
+	initPrefBlackList();
 
-// No reason to show this if no proximity sensor on device
-if (((SensorManager)getSystemService(SENSOR_SERVICE)).getDefaultSensor(
-        Sensor.TYPE_PROXIMITY) == null) {
-    ((PreferenceCategory) prefSet.findPreference(CATEGORY_ADVANCED)).
-            removePreference(mButtonAlwaysProximity);
-}
+	// No reason to show this if no proximity sensor on device
+	if (((SensorManager)getSystemService(SENSOR_SERVICE)).getDefaultSensor(
+									       Sensor.TYPE_PROXIMITY) == null) {
+	    ((PreferenceCategory) prefSet.findPreference(CATEGORY_ADVANCED)).
+		removePreference(mButtonAlwaysProximity);
+	}
 
-//====
-mButtonHideHoldButton = (CheckBoxPreference) prefSet.findPreference(BUTTON_HIDE_HOLD_BUTTON);
-mButtonHideHoldButton.setChecked(mHideHoldButton);
+	//====
+
+	// incoming call in background (cherry pick from gingerbread nadlabak
+        mBgIncallScreen = (CheckBoxPreference) prefSet.findPreference(BG_INCALL_SCREEN);
+        mBgIncallScreen.setChecked(mBgIncall);
+
+	mButtonHideHoldButton = (CheckBoxPreference) prefSet.findPreference(BUTTON_HIDE_HOLD_BUTTON);
+	mButtonHideHoldButton.setChecked(mHideHoldButton);
 
     }
 
@@ -1905,6 +1915,7 @@ private void init(Context context, SharedPreferences pref) {
     mLeftHand = pref.getBoolean(BUTTON_LEFT_HAND, false);
     mVibCallWaiting = pref.getBoolean(BUTTON_VIBRATE_CALL_WAITING, false);
     mForceTouch  = pref.getBoolean(BUTTON_FORCE_TOUCH, PhoneUtils.isProximitySensorAvailable(PhoneApp.getInstance()));
+    mBgIncall = pref.getBoolean(BG_INCALL_SCREEN, false);
     mHideHoldButton = pref.getBoolean(BUTTON_HIDE_HOLD_BUTTON, false);
     if (context.getResources().getBoolean(R.bool.crystaltalk_enabled)) {
         mVoiceQuality = pref.getString(BUTTON_VOICE_QUALITY_KEY, "Normal");
@@ -2027,6 +2038,7 @@ protected void onStop() {
     outState.putBoolean(BUTTON_LEFT_HAND, mButtonLeftHand.isChecked());
     outState.putBoolean(BUTTON_VIBRATE_CALL_WAITING, mButtonVibCallWaiting.isChecked());
     outState.putBoolean(BUTTON_FORCE_TOUCH, mButtonForceTouch == null || mButtonForceTouch.isChecked());
+    outState.putBoolean(BG_INCALL_SCREEN, mBgIncallScreen.isChecked());
     outState.putBoolean(BUTTON_HIDE_HOLD_BUTTON, mButtonHideHoldButton.isChecked());
     if (mButtonVoiceQuality != null) {
         outState.putString(BUTTON_VOICE_QUALITY_KEY, mButtonVoiceQuality.getValue());

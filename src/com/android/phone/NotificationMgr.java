@@ -89,7 +89,7 @@ public class NotificationMgr implements CallerInfoAsyncQuery.OnQueryCompleteList
     private IBinder mSpeakerphoneIcon;
     private IBinder mMuteIcon;
 
-private CallFeaturesSetting mSettings;
+    private CallFeaturesSetting mSettings;
 
     // used to track the missed call counter, default to 0.
     private int mNumberMissedCalls = 0;
@@ -112,6 +112,7 @@ private CallFeaturesSetting mSettings;
     private static final int CONTACT_TOKEN = -2;
     private static final int CLEAR_TOKEN = -3;
     private static final String CLEAR_MISSED_CALLS = "com.android.phone.clearmissedcalls";
+    private static boolean wasScreenOn = false;
 
     NotificationMgr(Context context) {
         mContext = context;
@@ -137,6 +138,11 @@ private CallFeaturesSetting mSettings;
 
     static NotificationMgr getDefault() {
         return sMe;
+    }
+
+    // state of screen when call arrived, set by CallNotifier
+    static void setScreenStateAtIncomingCall(boolean isScreenOn) {
+        wasScreenOn = isScreenOn;
     }
 
     /**

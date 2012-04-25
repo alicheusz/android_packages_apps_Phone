@@ -34,6 +34,7 @@ import android.os.AsyncResult;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.os.PowerManager;
 import android.os.SystemProperties;
 import android.os.Vibrator;
 import android.provider.CallLog;
@@ -178,6 +179,8 @@ public class CallNotifier extends Handler
     // Cached AudioManager
     private AudioManager mAudioManager;
 
+    private PowerManager mPowerManager;
+
     // add by cytown
     private CallFeaturesSetting mSettings;
     private static final String BLACKLIST = "blacklist";
@@ -191,6 +194,8 @@ public class CallNotifier extends Handler
         mCallLog = callLog;
 
         mAudioManager = (AudioManager) mPhone.getContext().getSystemService(Context.AUDIO_SERVICE);
+
+        mPowerManager = (PowerManager) mApplication.getSystemService(Context.POWER_SERVICE);
 
         mPhone.registerForNewRingingConnection(this, PHONE_NEW_RINGING_CONNECTION, null);
         mPhone.registerForPreciseCallStateChanged(this, PHONE_STATE_CHANGED, null);
@@ -468,6 +473,7 @@ public class CallNotifier extends Handler
             // sleep before we finish bringing up the InCallScreen.
             // (This will be upgraded soon to a full wake lock; see
             // PhoneUtils.showIncomingCallUi().)
+	    NotificationMgr.getDefault().setScreenStateAtIncomingCall(mPowerManager.isScreenOn());
             if (VDBG) log("Holding wake lock on new incoming connection.");
             mApplication.requestWakeState(PhoneApp.WakeState.PARTIAL);
 
